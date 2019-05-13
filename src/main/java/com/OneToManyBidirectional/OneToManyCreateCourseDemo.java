@@ -1,10 +1,10 @@
-package com.OneToOneMapping;
+package com.OneToManyBidirectional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class OneToneDemo {
+public class OneToManyCreateCourseDemo {
     public static void main(String[] args) {
 
         //create session factory
@@ -12,30 +12,26 @@ public class OneToneDemo {
                 .configure("hibernate.cgf.xml")
                 .addAnnotatedClass(Instructor.class)
                 .addAnnotatedClass(InstructorDetails.class)
+                .addAnnotatedClass(Course.class)
                 .buildSessionFactory();
 
         //create session
         Session session = factory.openSession();
         try {
-            //create object of both classes
-            Instructor instructor =  new Instructor("Umang","Rastogi","umangrastog@hays.com");
-            InstructorDetails instructorDetails = new InstructorDetails("www.youtube.com","Hibernate");
-
             //begin the transcation
             session.beginTransaction();
 
-            //assosiates the objects together
-            instructor.setInstructorDetails(instructorDetails);
+            Course course = new Course("Core Java");
+            Instructor instructor = new Instructor();
+            instructor.setId(2);
+            course.setInstructor(instructor);
 
-            //save the session will save both objects because of cascade all
-            session.save(instructor);
+            session.save(course);
 
-            //commit the transcation
             session.getTransaction().commit();
 
-        }
 
-        finally {
+        } finally {
             factory.close();
         }
 

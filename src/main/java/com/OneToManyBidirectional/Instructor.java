@@ -1,6 +1,7 @@
-package com.OneToOneMapping;
+package com.OneToManyBidirectional;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "instructor")
@@ -19,22 +20,23 @@ public class Instructor {
     @Column(name = "email")
     private String email;
 
-    public InstructorDetails getInstructorDetails() {
-        return instructorDetails;
-    }
-
-    public void setInstructorDetails(InstructorDetails instructorDetails) {
-        this.instructorDetails = instructorDetails;
-    }
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detials_id")
     InstructorDetails instructorDetails;
 
-    public Instructor() {
-    }
+    @OneToMany(cascade = {CascadeType.PERSIST,
+            CascadeType.DETACH,
+            CascadeType.REFRESH,
+            CascadeType.MERGE})
+    @JoinTable(name = "instructor_course_mapping",
+            joinColumns = @JoinColumn(name = "instructor_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+            private List<Course> courseList;
 
-    public Instructor(String firstName, String lastName, String email) {
+            public Instructor(){
+            }
+
+            public Instructor(String firstName, String lastName, String email) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,6 +51,22 @@ public class Instructor {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public List<Course> getCourseList() {
+        return courseList;
+    }
+
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
+    }
+
+    public InstructorDetails getInstructorDetails() {
+        return instructorDetails;
+    }
+
+    public void setInstructorDetails(InstructorDetails instructorDetails) {
+        this.instructorDetails = instructorDetails;
     }
 
     public int getId() {

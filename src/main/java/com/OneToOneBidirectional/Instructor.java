@@ -1,4 +1,4 @@
-package com.OneToOneMapping;
+package com.OneToOneBidirectional;
 
 import javax.persistence.*;
 
@@ -18,14 +18,6 @@ public class Instructor {
 
     @Column(name = "email")
     private String email;
-
-    public InstructorDetails getInstructorDetails() {
-        return instructorDetails;
-    }
-
-    public void setInstructorDetails(InstructorDetails instructorDetails) {
-        this.instructorDetails = instructorDetails;
-    }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detials_id")
@@ -49,6 +41,14 @@ public class Instructor {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public InstructorDetails getInstructorDetails() {
+        return instructorDetails;
+    }
+
+    public void setInstructorDetails(InstructorDetails instructorDetails) {
+        this.instructorDetails = instructorDetails;
     }
 
     public int getId() {
